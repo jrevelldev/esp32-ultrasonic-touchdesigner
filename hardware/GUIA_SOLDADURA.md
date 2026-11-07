@@ -1,6 +1,22 @@
 # ESP32-C3 Super Mini i HC-SR04 de 5 V
 
-Aquesta guia correspon al sensor HC-SR04 estàndard de **5 V amb quatre pins: VCC, TRIG, ECHO i GND**, com el de la captura que vas mostrar. Abans de soldar, comprova aquestes etiquetes al sensor real. L'esquema és funcional: la posició dibuixada dels terminals no representa la posició dels forats de la teva placa.
+Aquesta guia correspon al sensor HC-SR04 estàndard de **5 V amb quatre pins: VCC, TRIG, ECHO i GND**, com el de la captura que vas mostrar. Abans de soldar, comprova aquestes etiquetes al sensor real. L’esquema actualitzat mostra l’orientació frontal de la referència: USB a dalt, botons just a sota i antena a baix. Segueix igualment la serigrafia real.
+
+## Orientació de la placa que has mostrat
+
+Amb l’USB a dalt i mirant **la cara amb components i botons**, el costat dret té, de dalt a baix:
+
+`5V · G/GND · 3V3 · GPIO4 · GPIO3 · GPIO2 · GPIO1 · GPIO0`
+
+Fem servir el primer (5V), segon (GND), quart (GPIO4) i cinquè (GPIO3). El tercer (3V3) queda sense connectar en aquest muntatge. A la cara posterior aquests pins es veuen al costat esquerre. Les tres [imatges originals de referència](referencies/) es conserven sense modificar.
+
+Amb el sensor vist de davant, càpsules a dalt i pins cap avall, l’ordre d’esquerra a dreta és `VCC · TRIG · ECHO · GND`.
+
+## Alimentació a 3,3 V?
+
+La imatge identifica un **HC-SR04**, però no acredita una variant de baixa tensió. Per al HC-SR04 estàndard mantenim **5 V i el divisor de 2,2 kΩ / 3,3 kΩ**. Alimentar-lo a 3,3 V pot fer que sembli funcionar, però amb menys fiabilitat; no és el muntatge de referència. TRIG sí que rep directament els 3,3 V de GPIO4. [Font d’Adafruit](https://learn.adafruit.com/distance-measurement-ultrasound-hcsr04/connect-the-sensor).
+
+Només podem prescindir del divisor amb un sensor que tingui alimentació **i sortida ECHO** especificades per a 3,3 V, per exemple un [US-100](https://www.adafruit.com/product/4019) alimentat a 3,3 V en mode TRIG/ECHO (jumper posterior retirat). Caldria seguir el pinout d’aquell mòdul. El divisor actual amb ECHO a 3,3 V donaria 1,98 V i no s’hauria de conservar.
 
 ## Material
 

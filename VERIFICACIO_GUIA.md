@@ -14,3 +14,13 @@
 - Les dues il·lustracions aportades s’han copiat sense modificar-les. La guia indica que són conceptuals i que cal seguir les etiquetes de les plaques reals.
 
 La lectura del sensor HC-SR04 físic continua pendent, tal com s’explica a [VALIDACIO.md](VALIDACIO.md).
+
+## Actualització del cablejat i de les referències
+
+- Incorporades tres captures originals aportades per l’usuari (frontal, posterior i HC-SR04), sense retocar-les.
+- Il·lustració principal refeta amb la placa frontal correcta i el sensor en vertical, segons la preferència de l’usuari.
+- Revisades les quatre connexions del sensor, els pins 5V/GND/GPIO4/GPIO3 de la Super Mini i el divisor R1/R2; GND no està connectat a GPIO0.
+- Esquema SVG actualitzat i exportació PNG regenerada des del mateix esquema.
+- Afegida l’explicació de 5 V enfront de 3,3 V amb fonts d’Adafruit i l’alternativa US-100 alimentat a 3,3 V en mode TRIG/ECHO.
+- Comprovada l’ampliació de la nova il·lustració en navegador, les tres referències i l’absència de desbordament de la pàgina a 390 px.
+- Firmware i fitxers TouchDesigner sense canvis en aquesta actualització.

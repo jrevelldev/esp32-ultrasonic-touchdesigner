@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="title desc">
+<title id="title">ESP32-C3 Super Mini frontal i HC-SR04 de 5 V: connexions i corrent del divisor</title>
+<desc id="desc">USB a dalt. Costat dret de la placa: 5V, GND, 3V3, GPIO4, GPIO3, GPIO2, GPIO1, GPIO0. 5V a VCC; GND comú; GPIO4 a TRIG; ECHO a R1 de 2,2 kiloohms, punt A a GPIO3 i R2 de 3,3 kiloohms a GND.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#e58527"/></marker></defs>
+<rect width="1600" height="1120" fill="#edf3f8"/>
+
+<text x="65" y="65" fill="#173550" font-family="Arial, sans-serif" font-size="38" font-weight="700" text-anchor="start">La teva placa, de davant · USB a dalt</text>
+<text x="65" y="105" fill="#173550" font-family="Arial, sans-serif" font-size="23" font-weight="400" text-anchor="start">Sensor a 5 V · dos resistors adapten ECHO a ≈3 V · punts plens = unions elèctriques</text>
+<rect x="75" y="170" width="360" height="680" rx="20" fill="#172c3b" stroke="#172c3b" stroke-width="2"/>
+<rect x="195" y="145" width="120" height="155" rx="10" fill="#bcc7d1" stroke="#708798" stroke-width="2"/>
+<text x="255" y="230" fill="#173550" font-family="Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">USB-C</text>
+<rect x="170" y="335" width="75" height="65" rx="12" fill="#8c9ca7" stroke="none" stroke-width="2"/>
+<rect x="275" y="335" width="75" height="65" rx="12" fill="#8c9ca7" stroke="none" stroke-width="2"/>
+<text x="208" y="376" fill="#173550" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle">BOOT</text>
+<text x="312" y="376" fill="#173550" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle">RST</text>
+<rect x="186" y="475" width="145" height="145" rx="5" fill="#3d4b56" transform="rotate(45 258 548)"/>
+<text x="255" y="545" fill="white" font-family="Arial, sans-serif" font-size="23" font-weight="700" text-anchor="middle">ESP32-C3</text>
+<rect x="165" y="755" width="180" height="48" rx="12" fill="#b64546" stroke="none" stroke-width="2"/>
+<text x="255" y="787" fill="white" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="middle">ANTENA</text>
+<circle cx="80" cy="255" r="10" fill="#d7c690"/>
+<text x="100" y="261" fill="#90a4b4" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">GPIO5</text>
+<circle cx="80" cy="325" r="10" fill="#d7c690"/>
+<text x="100" y="331" fill="#90a4b4" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">GPIO6</text>
+<circle cx="80" cy="395" r="10" fill="#d7c690"/>
+<text x="100" y="401" fill="#90a4b4" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">GPIO7</text>
+<circle cx="80" cy="465" r="10" fill="#d7c690"/>
+<text x="100" y="471" fill="#90a4b4" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">GPIO8</text>
+<circle cx="80" cy="535" r="10" fill="#d7c690"/>
+<text x="100" y="541" fill="#90a4b4" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">GPIO9</text>
+<circle cx="80" cy="605" r="10" fill="#d7c690"/>
+<text x="100" y="611" fill="#90a4b4" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">GPIO10</text>
+<circle cx="80" cy="675" r="10" fill="#d7c690"/>
+<text x="100" y="681" fill="#90a4b4" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">GPIO20</text>
+<circle cx="80" cy="745" r="10" fill="#d7c690"/>
+<text x="100" y="751" fill="#90a4b4" font-family="Arial, sans-serif" font-size="17" font-weight="400" text-anchor="start">GPIO21</text>
+<circle cx="435" cy="255" r="10" fill="#d7c690"/>
+<text x="416" y="262" fill="white" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">5V</text>
+<text x="535" y="242" fill="#c94348" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="start">5V</text>
+<circle cx="435" cy="325" r="10" fill="#d7c690"/>
+<text x="416" y="332" fill="white" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">GND</text>
+<text x="535" y="312" fill="#33485b" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="start">GND</text>
+<circle cx="435" cy="395" r="10" fill="#d7c690"/>
+<text x="416" y="402" fill="#8ba0ae" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">3V3</text>
+<circle cx="435" cy="465" r="10" fill="#d7c690"/>
+<text x="416" y="472" fill="white" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">GPIO4</text>
+<text x="535" y="452" fill="#256bd0" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="start">GPIO4</text>
+<circle cx="435" cy="535" r="10" fill="#d7c690"/>
+<text x="416" y="542" fill="white" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">GPIO3</text>
+<text x="535" y="522" fill="#17836d" font-family="Arial, sans-serif" font-size="20" font-weight="700" text-anchor="start">GPIO3</text>
+<circle cx="435" cy="605" r="10" fill="#d7c690"/>
+<text x="416" y="612" fill="#8ba0ae" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">GPIO2</text>
+<circle cx="435" cy="675" r="10" fill="#d7c690"/>
+<text x="416" y="682" fill="#8ba0ae" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">GPIO1</text>
+<circle cx="435" cy="745" r="10" fill="#d7c690"/>
+<text x="416" y="752" fill="#8ba0ae" font-family="Arial, sans-serif" font-size="19" font-weight="700" text-anchor="end">GPIO0</text>
+<text x="255" y="885" fill="#173550" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle">Vista frontal esquemàtica</text>
+<rect x="1080" y="175" width="460" height="300" rx="15" fill="#245a83" stroke="#164167" stroke-width="2"/>
+<circle cx="1190" cy="300" r="83" fill="#a7b9c6" stroke="#e5edf2" stroke-width="6"/><circle cx="1190" cy="300" r="65" fill="#19384d"/>
+<circle cx="1430" cy="300" r="83" fill="#a7b9c6" stroke="#e5edf2" stroke-width="6"/><circle cx="1430" cy="300" r="65" fill="#19384d"/>
+<text x="1310" y="205" fill="white" font-family="Arial, sans-serif" font-size="23" font-weight="700" text-anchor="middle">HC-SR04</text>
+<text x="1170" y="441" fill="white" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle">VCC</text>
+<line x1="1170" y1="470" x2="1170" y2="520" stroke="#8293a0" stroke-width="8"/>
+<text x="1240" y="441" fill="white" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle">TRIG</text>
+<line x1="1240" y1="470" x2="1240" y2="520" stroke="#8293a0" stroke-width="8"/>
+<text x="1310" y="441" fill="white" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle">ECHO</text>
+<line x1="1310" y1="470" x2="1310" y2="520" stroke="#8293a0" stroke-width="8"/>
+<text x="1380" y="441" fill="white" font-family="Arial, sans-serif" font-size="21" font-weight="700" text-anchor="middle">GND</text>
+<line x1="1380" y1="470" x2="1380" y2="520" stroke="#8293a0" stroke-width="8"/>
+<text x="1310" y="150" fill="#173550" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="middle">Mira les càpsules de davant; pins avall</text>
+<polyline points="435,325 510,325 510,925 1380,925 1380,520" fill="none" stroke="#edf3f8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="435,325 510,325 510,925 1380,925 1380,520" fill="none" stroke="#33485b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="435,255 1005,255 1005,560 1170,560 1170,520" fill="none" stroke="#edf3f8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="435,255 1005,255 1005,560 1170,560 1170,520" fill="none" stroke="#c94348" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="435,465 950,465 950,610 1240,610 1240,520" fill="none" stroke="#edf3f8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="435,465 950,465 950,610 1240,610 1240,520" fill="none" stroke="#256bd0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="435,535 600,535 600,705 790,705" fill="none" stroke="#edf3f8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="435,535 600,535 600,705 790,705" fill="none" stroke="#17836d" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1310,520 1310,705 1080,705" fill="none" stroke="#edf3f8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1310,520 1310,705 1080,705" fill="none" stroke="#b68a0b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="980,705 790,705" fill="none" stroke="#edf3f8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="980,705 790,705" fill="none" stroke="#b68a0b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="980" y="684" width="100" height="42" rx="2" fill="white" stroke="#173550" stroke-width="2"/>
+<text x="1030" y="666" fill="#173550" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="middle">R1 · 2,2 kΩ</text>
+<polyline points="790,705 790,775" fill="none" stroke="#edf3f8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="790,705 790,775" fill="none" stroke="#b68a0b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="790,835 790,925" fill="none" stroke="#edf3f8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="790,835 790,925" fill="none" stroke="#33485b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="769" y="775" width="42" height="60" rx="2" fill="white" stroke="#173550" stroke-width="2"/>
+<text x="830" y="806" fill="#173550" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="start">R2 · 3,3 kΩ</text>
+<circle cx="790" cy="705" r="8" fill="#173550"/>
+<circle cx="790" cy="925" r="8" fill="#173550"/>
+<text x="707" y="750" fill="#17836d" font-family="Arial, sans-serif" font-size="24" font-weight="700" text-anchor="end">A · ≈3,0 V</text>
+<text x="640" y="502" fill="#256bd0" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">TRIG: impuls de 3,3 V</text>
+<text x="665" y="230" fill="#c94348" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="start">Alimentació del sensor: 5 V</text>
+<text x="1085" y="750" fill="#b68a0b" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="start">ECHO alt: 5 V</text>
+<text x="1150" y="970" fill="#33485b" font-family="Arial, sans-serif" font-size="23" font-weight="700" text-anchor="middle">GND comú</text>
+<path d="M1225 705 L1150 705" stroke="#e58527" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M943 705 L866 705" stroke="#e58527" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M790 726 L790 763" stroke="#e58527" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M790 850 L790 908" stroke="#e58527" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M713 925 L620 925" stroke="#e58527" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="660" y="595" fill="#17836d" font-family="Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">GPIO3 només mesura</text>
+<text x="660" y="622" fill="#17836d" font-family="Arial, sans-serif" font-size="18" font-weight="400" text-anchor="start">la tensió; corrent gairebé nul</text>
+<rect x="65" y="1010" width="1475" height="78" rx="14" fill="white" stroke="#d3dee8" stroke-width="2"/>
+<text x="92" y="1043" fill="#173550" font-family="Arial, sans-serif" font-size="26" font-weight="700" text-anchor="start">ECHO → R1 → A → R2 → GND</text>
+<text x="92" y="1072" fill="#173550" font-family="Arial, sans-serif" font-size="21" font-weight="400" text-anchor="start">Corrent convencional quan ECHO és alt: ≈0,91 mA. Els creuaments sense punt NO s’uneixen.</text>
+<text x="1490" y="1044" fill="#173550" font-family="Arial, sans-serif" font-size="22" font-weight="400" text-anchor="end">5 × 3,3 / (2,2 + 3,3)</text>
+<text x="1490" y="1073" fill="#173550" font-family="Arial, sans-serif" font-size="22" font-weight="700" text-anchor="end">= 3,0 V al punt A</text>
+</svg>

@@ -58,7 +58,7 @@ Missatges aproximadament a 10 Hz: `/sensor/distancia` (float cm), `/sensor/proxi
 
 ## Sensor i soldadura
 
-**Les il·lustracions són conceptuals i generades: segueix les etiquetes reals dels pins i comprova les resistències.** No utilitzis la posició dels forats o les bandes dibuixades com a pinout o codi de colors.
+**Il·lustració actualitzada segons les referències de la placa i del sensor.** Amb l’USB a dalt i mirant la cara amb components, els pins del costat dret són 5V, GND, 3V3, GPIO4, GPIO3, GPIO2, GPIO1 i GPIO0. A la cara posterior apareixen a l’esquerra. Comprova sempre la serigrafia real. Les fotos de referència són a [hardware/referencies](hardware/referencies/).
 
 | HC-SR04 de 5 V | ESP32-C3 |
 | --- | --- |
@@ -68,7 +68,13 @@ Missatges aproximadament a 10 Hz: `/sensor/distancia` (float cm), `/sensor/proxi
 | ECHO | R1 de 2,2 kΩ → punt A → GPIO3 |
 | Punt A | R2 de 3,3 kΩ → GND |
 
-El divisor deixa aproximadament **3 V** al GPIO3. **ECHO de 5 V no es connecta directament al GPIO.** Munta i solda sense alimentació, comprova curtcircuits i aïlla les unions. [Guia completa de soldadura](hardware/GUIA_SOLDADURA.md) · [Esquema funcional](hardware/esquema.svg) · [Il·lustració del corrent](docs/assets/corrent-divisor.png).
+El divisor deixa aproximadament **3 V** al GPIO3. **ECHO de 5 V no es connecta directament al GPIO.** Munta i solda sense alimentació, comprova curtcircuits i aïlla les unions. [Guia completa de soldadura](hardware/GUIA_SOLDADURA.md) · [Esquema funcional](hardware/esquema.svg) · [Il·lustració del corrent](docs/assets/corrent-divisor.svg).
+
+### Per què mantenim 5 V i les dues resistències?
+
+La referència mostra un HC-SR04 estàndard, no una variant certificada per funcionar a 3,3 V. El mantenim alimentat a 5 V: TRIG accepta l’impuls de 3,3 V de l’ESP, mentre que ECHO necessita el divisor de 2,2 kΩ / 3,3 kΩ. Alimentar un HC-SR04 estàndard a 3,3 V pot donar resultats poc fiables. [Referència d’Adafruit](https://learn.adafruit.com/distance-measurement-ultrasound-hcsr04/connect-the-sensor).
+
+Per eliminar el divisor cal un mòdul amb alimentació i ECHO documentats per a 3,3 V, com un [US-100](https://www.adafruit.com/product/4019) alimentat a 3,3 V en mode TRIG/ECHO (jumper posterior retirat). No és el sensor que mostren aquestes fotos. Si ECHO fos realment de 3,3 V, el divisor actual el reduiria a 1,98 V: no el conservis en aquell muntatge.
 
 ## Què hi ha al repositori
 
