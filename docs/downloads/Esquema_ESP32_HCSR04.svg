@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1040" viewBox="0 0 1600 1040">
+<rect width="1600" height="1040" fill="#eef3f8"/>
+<text x="80" y="50" font-family="Arial, Helvetica, sans-serif" font-size="41" font-weight="700" fill="#18334d" text-anchor="start" dominant-baseline="central">ESP32-C3 Super Mini + HC-SR04 de 5 V</text>
+<text x="80" y="100" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="400" fill="#18334d" text-anchor="start" dominant-baseline="central">Esquema funcional: segueix les etiquetes dels pins, no la seva posició en aquest dibuix.</text>
+<rect x="80" y="150" width="370" height="425" rx="16" fill="white" stroke="#c7d5e3" stroke-width="2"/>
+<rect x="1150" y="150" width="370" height="425" rx="16" fill="white" stroke="#c7d5e3" stroke-width="2"/>
+<text x="265" y="190" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" fill="#18334d" text-anchor="middle" dominant-baseline="central">ESP32-C3</text>
+<text x="265" y="230" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#18334d" text-anchor="middle" dominant-baseline="central">Super Mini · alimentació USB-C</text>
+<text x="1335" y="190" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" fill="#18334d" text-anchor="middle" dominant-baseline="central">HC-SR04</text>
+<text x="1335" y="230" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" fill="#18334d" text-anchor="middle" dominant-baseline="central">Versió de 5 V · 4 pins</text>
+<text x="415" y="280" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#d44343" text-anchor="end" dominant-baseline="central">5V</text>
+<circle cx="450" cy="280" r="6" fill="#d44343"/>
+<text x="415" y="350" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#2066c9" text-anchor="end" dominant-baseline="central">4  /  GPIO4</text>
+<circle cx="450" cy="350" r="6" fill="#2066c9"/>
+<text x="415" y="420" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#138066" text-anchor="end" dominant-baseline="central">3  /  GPIO3</text>
+<circle cx="450" cy="420" r="6" fill="#138066"/>
+<text x="415" y="490" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#455565" text-anchor="end" dominant-baseline="central">G  /  GND</text>
+<circle cx="450" cy="490" r="6" fill="#455565"/>
+<text x="1185" y="280" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#d44343" text-anchor="start" dominant-baseline="central">VCC</text>
+<circle cx="1150" cy="280" r="6" fill="#d44343"/>
+<text x="1185" y="350" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#2066c9" text-anchor="start" dominant-baseline="central">TRIG</text>
+<circle cx="1150" cy="350" r="6" fill="#2066c9"/>
+<text x="1185" y="420" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#138066" text-anchor="start" dominant-baseline="central">ECHO</text>
+<circle cx="1150" cy="420" r="6" fill="#138066"/>
+<text x="1185" y="490" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#455565" text-anchor="start" dominant-baseline="central">GND</text>
+<circle cx="1150" cy="490" r="6" fill="#455565"/>
+<text x="265" y="545" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#18334d" text-anchor="middle" dominant-baseline="central">BOOT i LED continuen disponibles</text>
+<text x="1335" y="545" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#18334d" text-anchor="middle" dominant-baseline="central">Respecta la serigrafia del sensor</text>
+<polyline points="450,280 1150,280" fill="none" stroke="#d44343" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="800" y="258" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="400" fill="#d44343" text-anchor="middle" dominant-baseline="central">Alimentació · 5 V</text>
+<polyline points="450,350 1150,350" fill="none" stroke="#2066c9" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="786,341 804,350 786,359" fill="#2066c9"/>
+<text x="800" y="327" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="400" fill="#2066c9" text-anchor="middle" dominant-baseline="central">TRIG · senyal de 3,3 V</text>
+<polyline points="1150,420 1030,420" fill="none" stroke="#138066" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="930" y="404" width="100" height="32" rx="2" fill="#edf8f3" stroke="#138066" stroke-width="3"/>
+<polyline points="930,420 450,420" fill="none" stroke="#138066" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="879,411 861,420 879,429" fill="#138066"/>
+<circle cx="760" cy="420" r="7" fill="#138066"/>
+<text x="980" y="380" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#138066" text-anchor="middle" dominant-baseline="central">R1 · 2,2 kΩ</text>
+<text x="1090" y="463" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#138066" text-anchor="middle" dominant-baseline="central">5 V</text>
+<text x="610" y="463" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#138066" text-anchor="middle" dominant-baseline="central">≈ 3,0 V</text>
+<polyline points="760,420 760,515" fill="none" stroke="#138066" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="744" y="515" width="32" height="70" rx="2" fill="#edf8f3" stroke="#138066" stroke-width="3"/>
+<polyline points="760,585 760,660" fill="none" stroke="#455565" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="807" y="545" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#138066" text-anchor="start" dominant-baseline="central">R2 · 3,3 kΩ</text>
+<text x="807" y="580" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#18334d" text-anchor="start" dominant-baseline="central">del punt central a GND</text>
+<polyline points="450,490 500,490 500,660 1100,660 1100,490 1150,490" fill="none" stroke="#455565" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="760" cy="660" r="7" fill="#455565"/>
+<polyline points="760,660 760,680" fill="none" stroke="#455565" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="739,680 781,680" fill="none" stroke="#455565" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="746,690 774,690" fill="none" stroke="#455565" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="753,700 767,700" fill="none" stroke="#455565" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1020" y="698" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="400" fill="#455565" text-anchor="middle" dominant-baseline="central">GND comú</text>
+<text x="80" y="660" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#18334d" text-anchor="start" dominant-baseline="central">USB-C → ordinador</text>
+<text x="80" y="698" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" fill="#18334d" text-anchor="start" dominant-baseline="central">o carregador USB de 5 V</text>
+<rect x="80" y="760" width="1440" height="220" rx="16" fill="#ffffff" stroke="#c7d5e3" stroke-width="2"/>
+<text x="110" y="800" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" fill="#18334d" text-anchor="start" dominant-baseline="central">El punt entre les dues resistències és el que va a GPIO3.</text>
+<text x="110" y="846" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" fill="#18334d" text-anchor="start" dominant-baseline="central">R1: entre ECHO i el punt central.   R2: entre el punt central i GND.</text>
+<text x="110" y="889" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" fill="#138066" text-anchor="start" dominant-baseline="central">Divisor: 5 V × 3,3 / (2,2 + 3,3) = 3,0 V aproximadament.</text>
+<text x="110" y="938" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" fill="#d44343" text-anchor="start" dominant-baseline="central">Solda amb l’USB desconnectat i aïlla les unions amb termoretràctil.</text>
+<text x="80" y="1010" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" fill="#18334d" text-anchor="start" dominant-baseline="central">Esquema per al HC-SR04 estàndard de 5 V. Confirma les etiquetes abans de soldar.</text>
+</svg>

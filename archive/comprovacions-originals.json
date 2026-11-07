@@ -1,0 +1,40 @@
+{
+  "estat": "Prova amb ESP real i distància simulada verificada",
+  "ip_esp": "192.168.5.50",
+  "destinacio_osc": "192.168.5.179:9000",
+  "compilacio": "ESP32-C3 / esp32 3.3.12 / USB CDC activat",
+  "sha256_programa_carregat": "875c7bb24359f04c1524c81d58f0708441e86d8449882073bd2919394a8f92c9",
+  "comprovacions": [
+    {
+      "prova": "Distància manual 42 cm",
+      "resultat": "correcte",
+      "rebut_cm": 42.0,
+      "proximitat": 0.8777777552604675
+    },
+    {
+      "prova": "Distància manual 155 cm",
+      "resultat": "correcte",
+      "rebut_cm": 155.0,
+      "proximitat": 0.25
+    },
+    {
+      "prova": "Avís sense senyal quan es canvia temporalment el port",
+      "resultat": "correcte"
+    },
+    {
+      "prova": "Recuperació del senyal i simulació automàtica",
+      "resultat": "correcte"
+    },
+    {
+      "prova": "Reobertura del projecte guardat",
+      "resultat": "verificat visualment: finestra automàtica i lectura OSC activa"
+    },
+    {
+      "prova": "Nom individual segons MAC de fàbrica",
+      "resultat": "Programa carregat; identificador i SSID verificats al monitor sèrie i a la web. TouchDesigner continua rebent lectures després del reinici."
+    }
+  ],
+  "pendent": "Sensor físic i cablejat",
+  "device_id": "8CD0B2D07415",
+  "config_ssid": "ESP-Config-8CD0B2D07415"
+}
