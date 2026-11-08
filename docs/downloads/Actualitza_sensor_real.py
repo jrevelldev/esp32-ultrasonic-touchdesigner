@@ -37,7 +37,8 @@ def status_text():
     return 'REBENT OSC  /  SENSOR REAL' if valid() else 'SENSOR REAL  /  SENSE ECO VÀLID'
 '''
 c.op('label').par.text.expr="op('helpers').module.source_label()"
-c.op('footer').par.text='20 cm: molt a prop  ·  200 cm: lluny\n\nHC-SR04 · TRIG GPIO4 · ECHO GPIO3\nOSC /sensor/distancia · /sensor/proximitat'
+if getattr(c.par, 'Nearcm', None) is None:
+    c.op('footer').par.text='20 cm: molt a prop  ·  200 cm: lluny\n\nHC-SR04 · TRIG GPIO4 · ECHO GPIO3\nOSC /sensor/distancia · /sensor/proximitat'
 # Canals separats per comparar el senyal i decidir on filtrar.
 rx=c.op('osc_in')
 for name,pattern,y in [('raw_cm','*raw',-550),('filtrada_esp_cm','*filtrada',-650),('validesa','*valid',-750),('interval_ms','*interval_ms',-850),('echo_us','*echo_us',-950)]:
@@ -51,8 +52,9 @@ for name,pattern,y in [('raw_cm','*raw',-550),('filtrada_esp_cm','*filtrada',-65
 lag=c.op('suavitzat_td') or c.create(lagCHOP,'suavitzat_td')
 lag.inputConnectors[0].connect(c.op('raw_cm'))
 lag.par.lagunit = 'seconds'
-lag.par.lag1=0.15
-lag.par.lag2=0.15
+if getattr(c.par, 'Smoothing', None) is None:
+    lag.par.lag1=0.15
+    lag.par.lag2=0.15
 lag.nodeX,lag.nodeY=700,-550
 lag.viewer=True
 # La mida de la bola segueix una transició contínua entre mostres OSC.
@@ -65,8 +67,9 @@ sizeLag.par.timeslice=True
 sizeLag.nodeX,sizeLag.nodeY=700,-80
 sizeLag.viewer=True
 circle=c.op('proximity_circle')
-circle.par.radiusx.expr="0.04 + 0.13 * max(0, min(1, op('mida_suau')[0])) + 0 * absTime.seconds"
-circle.par.radiusy.expr="me.par.radiusx"
+if getattr(c.par, 'Nearcm', None) is None:
+    circle.par.radiusx.expr="0.04 + 0.13 * max(0, min(1, op('mida_suau')[0])) + 0 * absTime.seconds"
+    circle.par.radiusy.expr="me.par.radiusx"
 c.op('LLEGEIX_ME').text = '''ESP32-C3 · HC-SR04 · OSC
 
 raw_cm: distància sense filtre en cm.

@@ -26,7 +26,13 @@ class Links(HTMLParser):
 
 parser = Links()
 parser.feed((SITE / 'index.html').read_text())
-for ref in parser.refs:
+quick = Links()
+quick.feed((SITE / 'comenca.html').read_text())
+assert 'index.html#wifi' in quick.refs
+assert 'index.html#touchdesigner' in quick.refs
+assert 'downloads/Prova_ESP32_TouchDesigner.toe' in quick.refs
+assert 'assets/qr-guia-imprimible.pdf' in quick.refs
+for ref in parser.refs + quick.refs:
     url = urlsplit(ref)
     if url.scheme or url.netloc: continue
     if not url.path:
@@ -49,4 +55,4 @@ for target in re.findall(r"\$\('#([^']+)'\)", js):
 for ext in ['toe', 'tox']:
     name = f'Prova_ESP32_TouchDesigner.{ext}'
     assert (ROOT / 'touchdesigner' / name).read_bytes() == (SITE / 'downloads' / name).read_bytes()
-print(f'OK: {len(parser.refs)} referències HTML; firmware, TouchDesigner, ZIP i sumes de verificació coherents.')
+print(f'OK: {len(parser.refs) + len(quick.refs)} referències HTML; guia ràpida, QR, firmware, TouchDesigner, ZIP i sumes de verificació coherents.')

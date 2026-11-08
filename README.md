@@ -1,3 +1,5 @@
+**Guia ràpida i QR del dispositiu:** [https://jrevelldev.github.io/esp32-ultrasonic-touchdesigner/comenca.html](https://jrevelldev.github.io/esp32-ultrasonic-touchdesigner/comenca.html) · [QR imprimible A6](https://jrevelldev.github.io/esp32-ultrasonic-touchdesigner/assets/qr-guia-imprimible.pdf)
+
 # Distància · ESP32-C3 × TouchDesigner
 
 Un dispositiu amb configuració Wi-Fi des del mòbil, web local, LED d’estat i enviament de distàncies per OSC a TouchDesigner.
@@ -111,7 +113,7 @@ La proximitat continua normalitzada entre 20 i 200 cm. Una distància real super
 
 Alternativa per al divisor quan disposes d’aquest material: **R1 = 2k2** i, d’A a GND, **2k2 + 1k5 en sèrie = 3k7**. Amb ECHO a 5 V, A queda aproximadament a 3,14 V. La il·lustració principal manté l’altra combinació vàlida de 2k2/3k3.
 
-Si ja tens un projecte TouchDesigner antic o una disposició pròpia, el script `touchdesigner/Actualitza_sensor_real.py` actualitza els indicadors de real/simulat i validesa sense reconstruir la xarxa de nodes. El projecte .toe distribuït inclou aquesta actualització.
+Per obtenir els controls visuals i el visor del component, descarrega el `.toe` o el `.tox` actual. El script `touchdesigner/Actualitza_sensor_real.py` queda com a utilitat per a projectes antics i només actualitza les etiquetes i els canals bàsics.
 
 ## Versió 1.2.0 · raw, suavitzat i ritme
 
@@ -128,7 +130,7 @@ A la web de l’ESP obre **Lectura i suavitzat**. Tria interval (70–1000 ms), 
 
 Les dades de distància invàlides valen −1 per OSC i `null` en JSON: consulta sempre `/sensor/valid`. La dada raw en cm ja es rebia sense filtre a la versió 1.1; els microsegons permeten veure també la mesura anterior a la conversió. Més freqüència no augmenta la precisió física del sensor.
 
-En el projecte TD: **raw_cm** → dada directa, **filtrada_esp_cm** → sortida del filtre a la placa, **suavitzat_td** → Lag CHOP de prova de **0,15 s** sobre raw. Pots variar Lag Up/Down o posar-los a 0. Aquesta branca és per utilitzar en els teus efectes; el panell principal continua mostrant `/sensor/distancia`. **validesa** indica si la dada es pot utilitzar. Evita acumular dos filtres involuntàriament: tria Raw a l’ESP si filtres a TD. [Documentació de Lag CHOP](https://derivative.ca/UserGuide/Lag_CHOP).
+En el projecte TD: **raw_cm** → dada directa, **filtrada_esp_cm** → sortida del filtre a la placa, **suavitzat_td** → suavitzat de la bola ajustable amb **Smoothing (s)** al component `esp32_demo`. El panell principal continua mostrant `/sensor/distancia`. **validesa** indica si la dada es pot utilitzar. Tria Raw a l’ESP si filtres a TD. [Documentació de Lag CHOP](https://derivative.ca/UserGuide/Lag_CHOP).
 
 La revisió **1.2.1** evita pauses provocades per diagnòstics USB quan el monitor no llegeix i limita la web a una sola consulta en curs. Si la connexió triga, ho indica en lloc de deixar dades aparentment actuals.
 
@@ -136,4 +138,4 @@ La revisió **1.2.1** evita pauses provocades per diagnòstics USB quan el monit
 
 A la web del sensor, sota **TouchDesigner · OSC**, el botó **Descarrega el patch de TouchDesigner** obre [la release v1.2.2](https://github.com/jrevelldev/esp32-ultrasonic-touchdesigner/releases/tag/v1.2.2). Inclou el projecte .toe complet, el component .tox i el firmware font en ZIP. Cal Internet per obrir GitHub; no és una actualització automàtica de la placa.
 
-La mida de la bola utilitza ara **mida_suau**, un Lag CHOP amb **Lag Up = 0,25 s** i **Lag Down = 0,25 s**, per créixer i reduir-se sense salts entre mostres. Els canals raw i el text de distància es mantenen disponibles. Per més suavitat, puja els dos valors; per una resposta més ràpida, baixa’ls.
+La bola es configura visualment a **Ball Controls**: Near/Far en cm, radi petit/gran, Smoothing i Near makes large. Sense eco vàlid, sempre pren l’estat «lluny». El node exterior `esp32_demo` mostra la lectura i el cercle. Els canals raw continuen disponibles.
