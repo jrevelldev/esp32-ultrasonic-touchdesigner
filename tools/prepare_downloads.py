@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'docs' / 'downloads'
 OUT.mkdir(parents=True, exist_ok=True)
 FILES = {
+    'touchdesigner/LLEGEIX_ME.md': 'README_TouchDesigner_CA.md',
     'touchdesigner/Actualitza_sensor_real.py': 'Actualitza_sensor_real.py',
     'firmware/ESP32_OSC_Demo/ESP32_OSC_Demo.ino': 'ESP32_OSC_Demo.ino',
     'touchdesigner/Prova_ESP32_TouchDesigner.toe': 'Prova_ESP32_TouchDesigner.toe',

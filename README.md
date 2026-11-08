@@ -19,7 +19,7 @@ La guia està en català, té deu passos, progrés desat al navegador, il·lustr
 | Cablejat HC-SR04 i divisor d’ECHO | Muntat per l’usuari; primera lectura física vàlida |
 | Lectura real del HC-SR04 | Implementada en 1.1.0, amb ecos físics vàlids rebuts |
 
-El firmware **1.2.1 arrenca amb el sensor real** (TRIG GPIO4, ECHO GPIO3). A la web pots seleccionar també simulació automàtica o manual. Si no hi ha eco vàlid, envia `/sensor/valid = 0`, distància OSC −1 i distància JSON `null`; no presenta una lectura antiga com a vigent. Vegeu [VALIDACIO.md](VALIDACIO.md).
+El firmware **1.2.2 arrenca amb el sensor real** (TRIG GPIO4, ECHO GPIO3). A la web pots seleccionar també simulació automàtica o manual. Si no hi ha eco vàlid, envia `/sensor/valid = 0`, distància OSC −1 i distància JSON `null`; no presenta una lectura antiga com a vigent. Vegeu [VALIDACIO.md](VALIDACIO.md).
 
 ## Setup des de zero
 
@@ -79,7 +79,7 @@ Per eliminar el divisor cal un mòdul amb alimentació i ECHO documentats per a 
 ## Què hi ha al repositori
 
 ```text
-firmware/       Programa complet 1.2.1: sensor real i simulació seleccionable
+firmware/       Programa complet 1.2.2: sensor real i simulació seleccionable
 touchdesigner/  Projecte .toe i component .tox validats
 hardware/       Esquema funcional i guia de soldadura
 docs/           Web estàtica per a GitHub Pages i descàrregues
@@ -131,3 +131,9 @@ Les dades de distància invàlides valen −1 per OSC i `null` en JSON: consulta
 En el projecte TD: **raw_cm** → dada directa, **filtrada_esp_cm** → sortida del filtre a la placa, **suavitzat_td** → Lag CHOP de prova de **0,15 s** sobre raw. Pots variar Lag Up/Down o posar-los a 0. Aquesta branca és per utilitzar en els teus efectes; el panell principal continua mostrant `/sensor/distancia`. **validesa** indica si la dada es pot utilitzar. Evita acumular dos filtres involuntàriament: tria Raw a l’ESP si filtres a TD. [Documentació de Lag CHOP](https://derivative.ca/UserGuide/Lag_CHOP).
 
 La revisió **1.2.1** evita pauses provocades per diagnòstics USB quan el monitor no llegeix i limita la web a una sola consulta en curs. Si la connexió triga, ho indica en lloc de deixar dades aparentment actuals.
+
+## Release 1.2.2 · descarregar TD des del sensor
+
+A la web del sensor, sota **TouchDesigner · OSC**, el botó **Descarrega el patch de TouchDesigner** obre [la release v1.2.2](https://github.com/jrevelldev/esp32-ultrasonic-touchdesigner/releases/tag/v1.2.2). Inclou el projecte .toe complet, el component .tox i el firmware font en ZIP. Cal Internet per obrir GitHub; no és una actualització automàtica de la placa.
+
+La mida de la bola utilitza ara **mida_suau**, un Lag CHOP amb **Lag Up = 0,25 s** i **Lag Down = 0,25 s**, per créixer i reduir-se sense salts entre mostres. Els canals raw i el text de distància es mantenen disponibles. Per més suavitat, puja els dos valors; per una resposta més ràpida, baixa’ls.

@@ -37,3 +37,7 @@ El diagnòstic USB podia esperar fins a 20 × 100 ms quan el host no consumia el
 TouchDesigner: canals raw_cm, filtrada_esp_cm, suavitzat_td, validesa, interval_ms i echo_us creats, amb un canal cadascun i sense errors. Lag Up/Down 0,15 i unitat seconds confirmats; .toe i .tox desats. La configuració d’adquisició 70 ms/raw/alpha 0,25 s’ha conservat durant la càrrega de 1.2.1.
 
 Prova de 25 s després de carregar 1.2.1, amb el monitor sèrie tancat i la web oberta: 161 respostes HTTP, cap error, latència mediana 47 ms i màxima 204 ms (abans: màxima 2.285 ms). 338 mostres en 24.876 ms de temps de mostreig; interval observat mediana 74 ms. 141 respostes amb eco vàlid. Les pauses periòdiques de dos segons no s’han reproduït en aquesta finestra de prova.
+
+## Revisió 1.2.2
+
+TD: mida_suau connectat a proximitat, Lag Up/Down de 0,25 segons, Time Slice actiu i radi del cercle connectat a la sortida suavitzada. Paràmetres i absència d’errors comprovats a la sessió oberta; .toe i .tox desats. La revisió del firmware afegeix un enllaç a la release v1.2.2 a la web local, sense canvis en l’adquisició.

@@ -55,6 +55,18 @@ lag.par.lag1=0.15
 lag.par.lag2=0.15
 lag.nodeX,lag.nodeY=700,-550
 lag.viewer=True
+# La mida de la bola segueix una transició contínua entre mostres OSC.
+sizeLag=c.op('mida_suau') or c.create(lagCHOP,'mida_suau')
+sizeLag.inputConnectors[0].connect(c.op('proximitat'))
+sizeLag.par.lagunit='seconds'
+sizeLag.par.lag1=0.25
+sizeLag.par.lag2=0.25
+sizeLag.par.timeslice=True
+sizeLag.nodeX,sizeLag.nodeY=700,-80
+sizeLag.viewer=True
+circle=c.op('proximity_circle')
+circle.par.radiusx.expr="0.04 + 0.13 * max(0, min(1, op('mida_suau')[0])) + 0 * absTime.seconds"
+circle.par.radiusy.expr="me.par.radiusx"
 c.op('LLEGEIX_ME').text = '''ESP32-C3 · HC-SR04 · OSC
 
 raw_cm: distància sense filtre en cm.
@@ -62,7 +74,9 @@ filtrada_esp_cm: sortida EMA de l’ESP (igual a raw si desactivat).
 suavitzat_td: Lag CHOP de prova de 0,15 segons sobre raw_cm.
 validesa: 1 mesura vàlida; 0 sense eco. No utilitzis −1 com a distància.
 interval_ms: interval real entre mesures. echo_us: pols ECHO en microsegons.
-distancia_cm i el panell utilitzen la sortida seleccionada a la web de l’ESP.
+distancia_cm i el text del panell utilitzen la sortida seleccionada a la web de l’ESP.
+mida_suau: Lag CHOP de 0,25 s que anima només la mida de la bola.
+Augmenta Lag Up/Down per una transició més lenta; redueix-los per més resposta.
 
 A la web: Lectura i suavitzat → Raw per filtrar només a TD.
 Les dades venen de l’ESP; TD no genera cap distància.

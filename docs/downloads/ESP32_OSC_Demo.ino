@@ -10,7 +10,8 @@ const int LED_PIN = 8;
 const int CONFIG_BUTTON_PIN = 9;
 const int TRIG_PIN = 4;
 const int ECHO_PIN = 3;
-const char* FIRMWARE_VERSION = "1.2.1";
+const char* FIRMWARE_VERSION = "1.2.2";
+const char* TD_RELEASE_URL = "https://github.com/jrevelldev/esp32-ultrasonic-touchdesigner/releases/tag/v1.2.2";
 bool realSensor = true;
 bool sensorReadingValid = false;
 unsigned long lastSensorRead = 0;
@@ -150,7 +151,7 @@ String pageHead(const char* title) {
     "main{background:white;border-radius:18px;padding:26px}label{display:block;margin:14px 0}"
     "input,select,button{box-sizing:border-box;width:100%;padding:12px;font:inherit;border:1px solid #aab9c8;border-radius:8px}"
     "button{background:#165bcc;color:white;cursor:pointer;margin-top:12px}small{display:block;color:#52677a}"
-    ".error{color:#a11}a{color:#165bcc}</style><main><h1>" + title + "</h1>";
+    ".download-button{display:block;box-sizing:border-box;text-align:center;text-decoration:none;background:#165bcc;color:white;padding:14px;border-radius:8px;margin:14px 0}a:focus-visible{outline:3px solid #18334d;outline-offset:3px}.error{color:#a11}a{color:#165bcc}</style><main><h1>" + title + "</h1>";
 }
 
 void handleWifiScan() {
@@ -559,6 +560,14 @@ void sendTelemetry() {
   server.send(200, "application/json", json);
 }
 
+String touchdesignerDownloadsPanel() {
+  String html = "<h2>Patch de TouchDesigner</h2>";
+  html += "<p>Projecte complet <strong>.toe</strong> o component reutilitzable <strong>.tox</strong>, amb la bola suavitzada.</p>";
+  html += "<a class='download-button' href='" + String(TD_RELEASE_URL) + "' target='_blank' rel='noopener noreferrer'>Descarrega el patch de TouchDesigner ↗</a>";
+  html += "<small>Release v1.2.2 · La descàrrega s'obre a GitHub i requereix Internet. Per substituir el patch, desa primer els teus canvis a TD.</small>";
+  return html;
+}
+
 void homePage() {
   if (portal) { sendConfigPage(); return; }
   String html = pageHead("El meu ESP32 · distància");
@@ -569,6 +578,7 @@ void homePage() {
   html += acquisitionPanel();
   html += "<p>IP de l'ESP: <strong>" + WiFi.localIP().toString() + "</strong></p>";
   html += oscConfigPanel();
+  html += touchdesignerDownloadsPanel();
   html += "<p>LED fix: connectat. Mantén BOOT 5 segons i deixa'l anar per configurar el Wi-Fi i la IP.</p></main></html>";
   server.send(200, "text/html; charset=utf-8", html);
 }
