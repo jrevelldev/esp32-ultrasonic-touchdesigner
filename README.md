@@ -130,7 +130,7 @@ A la web de l’ESP obre **Lectura i suavitzat**. Tria interval (70–1000 ms), 
 
 Les dades de distància invàlides valen −1 per OSC i `null` en JSON: consulta sempre `/sensor/valid`. La dada raw en cm ja es rebia sense filtre a la versió 1.1; els microsegons permeten veure també la mesura anterior a la conversió. Més freqüència no augmenta la precisió física del sensor.
 
-En el projecte TD: **raw_cm** → dada directa, **filtrada_esp_cm** → sortida del filtre a la placa, **suavitzat_td** → suavitzat de la bola ajustable amb **Smoothing (s)** al component `esp32_demo`. El panell principal continua mostrant `/sensor/distancia`. **validesa** indica si la dada es pot utilitzar. Tria Raw a l’ESP si filtres a TD. [Documentació de Lag CHOP](https://derivative.ca/UserGuide/Lag_CHOP).
+En el projecte TD: **raw_cm** → dada directa, **filtrada_esp_cm** → sortida del filtre a la placa, **suavitzat_td** → suavitzat opcional de la distància raw; **ball_target** i **ball_smooth** → mida de la bola, ajustable amb **Smoothing (s)** al component `esp32_demo`. El panell principal continua mostrant `/sensor/distancia`. **validesa** indica si la dada es pot utilitzar. Tria Raw a l’ESP si filtres a TD. [Documentació de Lag CHOP](https://derivative.ca/UserGuide/Lag_CHOP).
 
 La revisió **1.2.1** evita pauses provocades per diagnòstics USB quan el monitor no llegeix i limita la web a una sola consulta en curs. Si la connexió triga, ho indica en lloc de deixar dades aparentment actuals.
 
@@ -138,4 +138,4 @@ La revisió **1.2.1** evita pauses provocades per diagnòstics USB quan el monit
 
 A la web del sensor, sota **TouchDesigner · OSC**, el botó **Descarrega el patch de TouchDesigner** obre [la release v1.2.2](https://github.com/jrevelldev/esp32-ultrasonic-touchdesigner/releases/tag/v1.2.2). Inclou el projecte .toe complet, el component .tox i el firmware font en ZIP. Cal Internet per obrir GitHub; no és una actualització automàtica de la placa.
 
-La bola es configura visualment a **Ball Controls**: Near/Far en cm, radi petit/gran, Smoothing i Near makes large. Sense eco vàlid, sempre pren l’estat «lluny». El node exterior `esp32_demo` mostra la lectura i el cercle. Els canals raw continuen disponibles.
+La bola es configura visualment a **Ball Controls**: Near/Far en cm, radi petit/gran, Smoothing i Near makes large. Sense eco vàlid o sense dades recents, la mida transita suaument cap a «lluny». El node exterior `esp32_demo` mostra la lectura i el cercle. Els canals raw continuen disponibles.
