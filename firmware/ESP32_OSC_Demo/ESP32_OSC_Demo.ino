@@ -8,6 +8,21 @@
 // Super Mini habitual: LED a GPIO8, actiu a nivell baix.
 const int LED_PIN = 8;
 const int CONFIG_BUTTON_PIN = 9;
+const int TRIG_PIN = 4;
+const int ECHO_PIN = 3;
+const char* FIRMWARE_VERSION = "1.2.1";
+bool realSensor = true;
+bool sensorReadingValid = false;
+unsigned long lastSensorRead = 0;
+uint16_t sampleIntervalMs = 100;
+bool smoothingEnabled = false;
+float smoothingAlpha = 0.25f;
+bool filterReady = false;
+float rawDistanceCm = -1.0f;
+float filteredDistanceCm = -1.0f;
+unsigned long rawEchoUs = 0;
+unsigned long actualIntervalMs = 0;
+unsigned long sampleTimestampMs = 0;
 char AP_NAME[32] = "";
 char DEVICE_ID[13] = "";
 const char* AP_PASSWORD = "Configura32";
@@ -46,12 +61,11 @@ WiFiUDP oscUdp;
 String oscHost = ""; // Configura la IP del teu ordinador des de la web.
 uint16_t oscPort = 9000;
 bool automaticSimulation = true;
-float distanceCm = 110.0f;
+float distanceCm = -1.0f;
 float manualDistanceCm = 110.0f;
 float proximityValue = 0.5f;
 uint32_t oscSequence = 0;
 uint32_t oscFramesSent = 0;
-unsigned long lastOscSend = 0;
 
 void initializeDeviceIdentity() {
   uint8_t mac[6];
@@ -301,26 +315,97 @@ bool sendOscFloat(const char* address, float value) {
 }
 
 void updateSimulationAndOsc() {
-  if (automaticSimulation) {
-    float phase = float(millis() % 12000UL) / 6000.0f;
-    distanceCm = 20.0f + 180.0f * (phase <= 1.0f ? phase : 2.0f - phase);
-  } else distanceCm = manualDistanceCm;
-  proximityValue = constrain((200.0f - distanceCm) / 180.0f, 0.0f, 1.0f);
-  if (WiFi.status() != WL_CONNECTED || millis() - lastOscSend < 100) return;
-  lastOscSend = millis();
+  unsigned long now = millis();
+  if (now - lastSensorRead < sampleIntervalMs) return;
+  actualIntervalMs = lastSensorRead ? now - lastSensorRead : 0;
+  lastSensorRead = now;
+  sampleTimestampMs = now;
+  if (realSensor) {
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+    rawEchoUs = pulseIn(ECHO_PIN, HIGH, 30000UL);
+    rawDistanceCm = rawEchoUs * 0.0343f / 2.0f;
+    sensorReadingValid = rawEchoUs != 0 && rawDistanceCm >= 2.0f && rawDistanceCm <= 400.0f;
+    if (!sensorReadingValid) rawDistanceCm = -1.0f;
+  } else {
+    rawEchoUs = 0; // La simulació no és un eco físic.
+    if (automaticSimulation) {
+      float phase = float(now % 12000UL) / 6000.0f;
+      rawDistanceCm = 20.0f + 180.0f * (phase <= 1.0f ? phase : 2.0f - phase);
+    } else rawDistanceCm = manualDistanceCm;
+    sensorReadingValid = true;
+  }
+  if (sensorReadingValid) {
+    if (!filterReady || !smoothingEnabled) filteredDistanceCm = rawDistanceCm;
+    else filteredDistanceCm += smoothingAlpha * (rawDistanceCm - filteredDistanceCm);
+    filterReady = true;
+    distanceCm = smoothingEnabled ? filteredDistanceCm : rawDistanceCm;
+  } else {
+    filterReady = false;
+    filteredDistanceCm = distanceCm = -1.0f;
+  }
+  proximityValue = sensorReadingValid ? constrain((200.0f - distanceCm) / 180.0f, 0.0f, 1.0f) : 0.0f;
+  if (WiFi.status() != WL_CONNECTED) return;
   oscSequence++;
   bool ok = sendOscFloat("/sensor/distancia", distanceCm);
+  ok = sendOscFloat("/sensor/raw", rawDistanceCm) && ok;
+  ok = sendOscFloat("/sensor/filtrada", filteredDistanceCm) && ok;
+  ok = sendOscValue("/sensor/echo_us", 'i', rawEchoUs) && ok;
+  ok = sendOscValue("/sensor/interval_ms", 'i', actualIntervalMs) && ok;
+  ok = sendOscValue("/sensor/timestamp_ms", 'i', sampleTimestampMs) && ok;
   ok = sendOscFloat("/sensor/proximitat", proximityValue) && ok;
-  ok = sendOscValue("/sensor/simulat", 'i', 1) && ok;
+  ok = sendOscValue("/sensor/simulat", 'i', realSensor ? 0 : 1) && ok;
+  ok = sendOscValue("/sensor/valid", 'i', sensorReadingValid) && ok;
   ok = sendOscValue("/sensor/seq", 'i', oscSequence) && ok;
   if (ok) oscFramesSent++;
   static unsigned long lastReport = 0;
-  if (millis() - lastReport >= 5000) {
-    lastReport = millis();
-    Serial.printf("OSC: %.1f cm -> %s:%u | enviades=%lu | RSSI=%d | potencia=%d\n",
-      distanceCm, oscHost.c_str(), oscPort, (unsigned long)oscFramesSent,
-      WiFi.RSSI(), (int)WiFi.getTxPower());
+  if (now - lastReport >= 5000 && Serial.availableForWrite() >= 160) {
+    lastReport = now;
+    Serial.printf("RAW=%.1f cm ECHO=%lu us sortida=%.1f cm interval=%lu ms valid=%d OSC=%s:%u\n",
+      rawDistanceCm, rawEchoUs, distanceCm, actualIntervalMs, sensorReadingValid, oscHost.c_str(), oscPort);
   }
+}
+
+String acquisitionPanel() {
+  String html = "<h2>Lectura i suavitzat</h2><form method='post' action='/acquisition'>";
+  html += "<label>Interval entre mesures (ms)<input type='number' name='interval' min='70' max='1000' step='10' value='" + String(sampleIntervalMs) + "'></label>";
+  html += "<small>100 ms = 10 mesures/s. 70 ms ≈ 14 mesures/s. El HC-SR04 necessita més de 60 ms entre impulsos.</small>";
+  html += "<label>Sortida principal (/sensor/distancia)<select name='filter'>";
+  html += String("<option value='off'") + (!smoothingEnabled ? " selected" : "") + ">Raw · sense filtre</option>";
+  html += String("<option value='ema'") + (smoothingEnabled ? " selected" : "") + ">Suavitzat EMA a l'ESP</option></select></label>";
+  html += "<label>Alpha EMA (0,01–1)<input type='number' name='alpha' min='0.01' max='1' step='0.01' value='" + String(smoothingAlpha, 2) + "'></label>";
+  html += "<small>Alpha petit: més suavitzat i més retard. Alpha 1: sense suavitzat. /sensor/raw sempre conserva la mesura sense filtre. Per filtrar a TD, tria Raw aquí.</small>";
+  html += "<button>Desa lectura i suavitzat</button></form>";
+  return html;
+}
+
+void saveAcquisition() {
+  String intervalText = server.arg("interval"); intervalText.trim();
+  bool digits = !intervalText.isEmpty();
+  for (unsigned int i=0; i<intervalText.length(); i++) if (!isDigit(intervalText[i])) digits=false;
+  long interval = intervalText.toInt();
+  String filter = server.arg("filter");
+  String alphaText = server.arg("alpha");
+  char* end;
+  float alpha = strtof(alphaText.c_str(), &end);
+  if (!digits || interval < 70 || interval > 1000 ||
+      (filter != "off" && filter != "ema") || alphaText.isEmpty() || *end != '\0' ||
+      !isfinite(alpha) || alpha < 0.01f || alpha > 1.0f) {
+    server.send(400, "text/plain; charset=utf-8", "Interval: 70–1000 ms. Alpha: 0,01–1. Filtre: off o ema."); return;
+  }
+  if (!storageReady) { server.send(500,"text/plain","No es pot guardar."); return; }
+  sampleIntervalMs = uint16_t(interval);
+  smoothingEnabled = filter == "ema";
+  smoothingAlpha = alpha;
+  filterReady = false;
+  preferences.putUInt("sample-ms", sampleIntervalMs);
+  preferences.putBool("smooth-on", smoothingEnabled);
+  preferences.putFloat("smooth-a", smoothingAlpha);
+  server.sendHeader("Location", "/");
+  server.send(303, "text/plain", "");
 }
 
 String oscConfigPanel() {
@@ -335,12 +420,13 @@ String oscConfigPanel() {
 String simulationPanel() {
   String html = R"HTML(
 <style>
+.sensor-stats{display:grid;grid-template-columns:1fr auto;gap:4px;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}.sensor-stats dt,.sensor-stats dd{margin:0;min-height:1.5em;white-space:nowrap}.sensor-stats dd{text-align:right}
 #reading{font-variant-numeric:tabular-nums;white-space:nowrap}
 #telemetry-state{display:grid;grid-template-rows:repeat(3,1.5em);gap:4px;margin:16px 0;font-size:14px;line-height:1.5;min-width:0;font-variant-numeric:tabular-nums}
 #telemetry-state>div{display:flex;gap:.35em;min-width:0;white-space:nowrap}
 #telemetry-destination{min-width:0;overflow:hidden;text-overflow:ellipsis}
 </style>
-<p><strong>PROVA · SENSOR SIMULAT</strong></p>
+<p><strong id="source-label">SENSOR REAL · HC-SR04</strong></p>
 <p id="reading" style="font-size:48px;font-weight:750;margin:12px 0">— cm</p>
 <progress id="proximity" max="1" value="0" style="width:100%;height:22px"></progress>
 <div id="telemetry-state">
@@ -348,25 +434,54 @@ String simulationPanel() {
 <div>OSC → <span id="telemetry-destination">—</span></div>
 <div>Lectures enviades: <span id="telemetry-count">0</span></div>
 </div>
+<dl class="sensor-stats">
+<dt>Distància raw (cm)</dt><dd id="raw-cm">—</dd>
+<dt>Filtrada a l’ESP (cm)</dt><dd id="filtered-cm">—</dd>
+<dt>Durada ECHO (µs)</dt><dd id="echo-us">—</dd>
+<dt>Interval efectiu (ms)</dt><dd id="actual-interval">—</dd>
+</dl>
 <form method="post" action="/simulation">
-<label>Mode de prova<select name="mode">
+<label>Font de la distància<select name="mode">
 )HTML";
-  html += String("<option value='auto'") + (automaticSimulation ? " selected" : "") + ">Automàtic · 20–200 cm</option>";
-  html += String("<option value='manual'") + (!automaticSimulation ? " selected" : "") + ">Manual · valor fix</option></select></label>";
-  html += "<label>Distància manual (cm)<input type='number' name='distance' min='20' max='200' step='0.1' value='" + String(manualDistanceCm, 1) + "'></label>";
+  html += String("<option value='sensor'") + (realSensor ? " selected" : "") + ">Sensor real · HC-SR04</option>";
+  html += String("<option value='auto'") + (!realSensor && automaticSimulation ? " selected" : "") + ">Simulació automàtica · 20–200 cm</option>";
+  html += String("<option value='manual'") + (!realSensor && !automaticSimulation ? " selected" : "") + ">Simulació manual · valor fix</option></select></label>";
+  html += "<label>Distància manual (només simulació, cm)<input type='number' name='distance' min='20' max='200' step='0.1' value='" + String(manualDistanceCm, 1) + "'></label>";
   html += R"HTML(
-<button>Aplica simulació</button></form>
+<button>Aplica font de dades</button></form>
 <script>
-setInterval(async()=>{try{
- const t=await(await fetch('/telemetry',{cache:'no-store'})).json();
- document.getElementById('reading').textContent=t.distance_cm.toFixed(1)+' cm';
+let telemetrySequence=-1;
+let telemetryAdvancedAt=performance.now();
+async function refreshTelemetry(){
+ const started=performance.now();
+ const controller=new AbortController();
+ const deadline=setTimeout(()=>controller.abort(),1500);
+ try{
+ const response=await fetch('/telemetry',{cache:'no-store',signal:controller.signal});
+ if(!response.ok) throw new Error('HTTP '+response.status);
+ const t=await response.json();
+ if(t.sequence!==telemetrySequence){telemetrySequence=t.sequence;telemetryAdvancedAt=performance.now();}
+ document.getElementById('reading').textContent=t.valid?t.distance_cm.toFixed(1)+' cm':'— cm';
+ document.getElementById('source-label').textContent=t.simulated?'PROVA · SENSOR SIMULAT':'SENSOR REAL · HC-SR04';
  document.getElementById('proximity').value=t.proximity;
- document.getElementById('telemetry-mode').textContent=t.automatic?'Moviment automàtic':'Valor manual';
+ document.getElementById('raw-cm').textContent=t.valid?t.raw_distance_cm.toFixed(1):'—';
+ document.getElementById('filtered-cm').textContent=t.valid?t.filtered_distance_cm.toFixed(1):'—';
+ document.getElementById('echo-us').textContent=t.simulated?'—':t.raw_echo_us;
+ document.getElementById('actual-interval').textContent=t.actual_interval_ms;
+ document.getElementById('telemetry-mode').textContent=t.simulated?(t.automatic?'Moviment automàtic':'Valor manual'):(t.valid?'Sensor real · lectura vàlida':'Sensor real · sense eco vàlid');
  const destination=document.getElementById('telemetry-destination');
  destination.textContent=t.osc_host?t.osc_host+':'+t.osc_port:'Destinació pendent de configurar';
  destination.title=destination.textContent;
  document.getElementById('telemetry-count').textContent=t.frames_sent;
-}catch(e){}},300);
+ if(performance.now()-telemetryAdvancedAt>1500) document.getElementById('telemetry-mode').textContent='Lectura aturada · esperant una mostra nova';
+ }catch(e){document.getElementById('telemetry-mode').textContent='Web sense resposta · reconnectant…';}
+ finally{
+  clearTimeout(deadline);
+  // Una sola consulta en curs; les respostes lentes no creen una cua.
+  setTimeout(refreshTelemetry,Math.max(20,100-(performance.now()-started)));
+ }
+}
+refreshTelemetry();
 </script>
 )HTML";
   return html;
@@ -399,20 +514,41 @@ void setSimulation() {
   String raw = server.arg("distance");
   char* end;
   float value = strtof(raw.c_str(), &end);
-  if ((mode != "auto" && mode != "manual") || raw.isEmpty() || *end != '\0' ||
-      !isfinite(value) || value < 20 || value > 200) {
+  if ((mode != "sensor" && mode != "auto" && mode != "manual") || (mode != "sensor" && (raw.isEmpty() || *end != '\0' ||
+      !isfinite(value) || value < 20 || value > 200))) {
     server.send(400, "text/plain", "La distancia ha d'estar entre 20 i 200 cm."); return;
   }
+  realSensor = mode == "sensor";
   automaticSimulation = mode == "auto";
-  manualDistanceCm = value;
+  if (!realSensor) manualDistanceCm = value;
+  sensorReadingValid = false;
+  filterReady = false;
+  distanceCm = -1.0f;
+  lastSensorRead = 0;
   server.sendHeader("Location", "/");
   server.send(303, "text/plain", "");
 }
 
 void sendTelemetry() {
-  String json = "{\"simulated\":true,\"automatic\":";
-  json += automaticSimulation ? "true" : "false";
-  json += ",\"distance_cm\":" + String(distanceCm, 2);
+  String json = "{\"firmware\":\"ESP32 Ultrasonic TouchDesigner\",\"firmware_version\":\"" + String(FIRMWARE_VERSION) + "\",\"simulated\":";
+  json += realSensor ? "false" : "true";
+  json += ",\"automatic\":";
+  json += !realSensor && automaticSimulation ? "true" : "false";
+  json += ",\"valid\":";
+  json += sensorReadingValid ? "true" : "false";
+  json += ",\"distance_cm\":";
+  json += sensorReadingValid ? String(distanceCm, 2) : "null";
+  json += ",\"raw_distance_cm\":";
+  json += sensorReadingValid ? String(rawDistanceCm, 2) : "null";
+  json += ",\"filtered_distance_cm\":";
+  json += sensorReadingValid ? String(filteredDistanceCm, 2) : "null";
+  json += ",\"raw_echo_us\":" + String(rawEchoUs);
+  json += ",\"sample_interval_ms\":" + String(sampleIntervalMs);
+  json += ",\"actual_interval_ms\":" + String(actualIntervalMs);
+  json += ",\"sample_timestamp_ms\":" + String(sampleTimestampMs);
+  json += ",\"smoothing\":";
+  json += smoothingEnabled ? "true" : "false";
+  json += ",\"smoothing_alpha\":" + String(smoothingAlpha, 2);
   json += ",\"proximity\":" + String(proximityValue, 4);
   json += ",\"sequence\":" + String(oscSequence);
   json += ",\"frames_sent\":" + String(oscFramesSent);
@@ -428,7 +564,9 @@ void homePage() {
   String html = pageHead("El meu ESP32 · distància");
   html += "<p><small>Dispositiu: <strong>" + String(DEVICE_ID) +
     "</strong><br>Xarxa de configuració: " + String(AP_NAME) + "</small></p>";
+  html += "<p><small>ESP32 Ultrasonic TouchDesigner · firmware " + String(FIRMWARE_VERSION) + " · " + String(__DATE__) + " " + String(__TIME__) + "</small></p>";
   html += simulationPanel();
+  html += acquisitionPanel();
   html += "<p>IP de l'ESP: <strong>" + WiFi.localIP().toString() + "</strong></p>";
   html += oscConfigPanel();
   html += "<p>LED fix: connectat. Mantén BOOT 5 segons i deixa'l anar per configurar el Wi-Fi i la IP.</p></main></html>";
@@ -571,9 +709,17 @@ void setup() {
   digitalWrite(LED_PIN, HIGH);
   pinMode(LED_PIN, OUTPUT);
   pinMode(CONFIG_BUTTON_PIN, INPUT_PULLUP);
+  digitalWrite(TRIG_PIN, LOW);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
   Serial.begin(115200);
+#if ARDUINO_USB_CDC_ON_BOOT
+  // El monitor USB pot estar tancat: els diagnòstics no han d'aturar les mesures.
+  Serial.setTxTimeoutMs(0);
+#endif
   delay(1500);
   initializeDeviceIdentity();
+  Serial.printf("Firmware %s · sensor real · TRIG=%d ECHO=%d\n", FIRMWARE_VERSION, TRIG_PIN, ECHO_PIN);
   WiFi.onEvent(
     [](WiFiEvent_t event, WiFiEventInfo_t info) {
       Serial.print("\nMotiu de desconnexio: ");
@@ -592,6 +738,11 @@ void setup() {
   if (storageReady) {
     oscHost = preferences.getString("osc-host", "");
     oscPort = preferences.getUShort("osc-port", 9000);
+    unsigned int storedInterval = preferences.getUInt("sample-ms", 100);
+    sampleIntervalMs = storedInterval >= 70 && storedInterval <= 1000 ? storedInterval : 100;
+    smoothingEnabled = preferences.getBool("smooth-on", false);
+    smoothingAlpha = preferences.getFloat("smooth-a", 0.25f);
+    if (!isfinite(smoothingAlpha) || smoothingAlpha < 0.01f || smoothingAlpha > 1.0f) smoothingAlpha=0.25f;
   }
   oscUdp.begin(0);
   server.on("/", HTTP_GET, homePage);
@@ -599,6 +750,7 @@ void setup() {
   server.on("/wifi-scan", HTTP_GET, handleWifiScan);
   server.on("/osc", HTTP_POST, saveOscDestination);
   server.on("/simulation", HTTP_POST, setSimulation);
+  server.on("/acquisition", HTTP_POST, saveAcquisition);
   server.on("/telemetry", HTTP_GET, sendTelemetry);
   server.on("/status", HTTP_GET, []() {
     bool connected = !applyPending && WiFi.status() == WL_CONNECTED;

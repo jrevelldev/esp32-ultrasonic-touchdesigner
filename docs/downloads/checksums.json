@@ -1,9 +1,10 @@
 {
-  "ESP32_OSC_Demo.ino": "1e3d2b6ebc60a5442f2a2122b387bf044988afd4ebbd6c29688dcd915181ec83",
-  "ESP32_OSC_Demo.zip": "7cb72611eeeb38de7501f7ff2bb2efe48141ad3b69c9351fdd13f2382130b5ca",
+  "Actualitza_sensor_real.py": "d7c4f569f8168a816870eda3ef433c3ee24483111e6e739388d931a41b9c5235",
+  "ESP32_OSC_Demo.ino": "950aa42339b58e958c35627df28da5b2e673f804ce77d1e8bc076d8ba0246633",
+  "ESP32_OSC_Demo.zip": "8a72dcb38d6f84fcd8e4268c4fef9e1685d7df1d3ddec9ab121e897b9f3ee5c7",
   "Esquema_ESP32_HCSR04.png": "9859f195c01d2a00820c95887167c267354e4b042a8a1337acab54532872924b",
   "Esquema_ESP32_HCSR04.svg": "5a861d8c8df150eb85e8735b675b52ed3a551faefd07101f85bccf0726a01001",
-  "Guia_de_connexio_i_soldadura.md": "fbbcddacabc0432f5d26e04cd1f07de3f0a809ef702b87968d279385591cfe9c",
-  "Prova_ESP32_TouchDesigner.toe": "8df92b040d684cb5163a6dea3442c6ce4d33a7422d7abeab6f88aa162d058297",
-  "Prova_ESP32_TouchDesigner.tox": "9aa372a0a501089e30e1e4b026f0a8dd47aa92d6215483045c609c9263a01318"
+  "Guia_de_connexio_i_soldadura.md": "f0866e17bbfb5391ebe224cfbdcd6491a2b1dcc3cd1a3d4bad8b60d33af07d5e",
+  "Prova_ESP32_TouchDesigner.toe": "d87d4006a75830aa8499879940f4af23b0e91ac3656d56b15fba495df964a2d2",
+  "Prova_ESP32_TouchDesigner.tox": "cb191ee16ba19658b42581d8bd009a7c68b6b4e1a6836dabe082e0c8425fea9c"
 }

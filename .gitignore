@@ -16,3 +16,6 @@ __pycache__/
 touchdesigner/Backup/
 touchdesigner/CrashAutoSave/
 touchdesigner/*.toe.*
+
+touchdesigner/*.[0-9].toe
+touchdesigner/*.[0-9][0-9].toe

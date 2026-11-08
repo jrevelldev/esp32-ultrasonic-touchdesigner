@@ -87,6 +87,6 @@ Per comprovar el divisor amb un multímetre abans de connectar-lo al GPIO: amb e
 
 ## Programa de la placa
 
-El programa actual continua generant **distàncies simulades**. Connectar el sensor encara no farà que la web o TouchDesigner mostrin una lectura real. Quan el cablejat estigui revisat, cal afegir la lectura de TRIG a GPIO4 i ECHO a GPIO3 i canviar l'indicador de simulació.
+El firmware **1.1.0** llegeix el HC-SR04 físic per defecte, amb TRIG a GPIO4 i ECHO a GPIO3. A la web pots triar sensor real, simulació automàtica o simulació manual. Sense eco vàlid es mostra «— cm» i s’envia `/sensor/valid = 0`; no es manté una distància antiga com a actual.
 
-La configuració Wi-Fi, el nom individual, el LED d'estat i els missatges OSC es poden conservar. [Referència de pins de la Super Mini](https://nuttx.apache.org/docs/latest/platforms/risc-v/esp32c3/boards/esp32c3-supermini/index.html).
+Amb el material de l’usuari també es pot fer R1 amb 2k2 i la branca d’A a GND amb **2k2 + 1k5 en sèrie**: equival a 3k7 i dona aproximadament 3,14 V. El punt A continua unit a GPIO3.

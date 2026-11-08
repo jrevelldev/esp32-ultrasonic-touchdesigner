@@ -16,10 +16,10 @@ La guia està en català, té deu passos, progrés desat al navegador, il·lustr
 | Nom Wi-Fi individual, BOOT i LED | Provats |
 | Web local i OSC per Wi-Fi a TouchDesigner | Provats amb dades simulades |
 | Valors manuals de 42 i 155 cm rebuts a TouchDesigner | Comprovats |
-| Cablejat HC-SR04 i divisor d’ECHO | Documentats; muntatge pendent de validació |
-| Lectura real del HC-SR04 | **Encara no implementada en aquest firmware** |
+| Cablejat HC-SR04 i divisor d’ECHO | Muntat per l’usuari; primera lectura física vàlida |
+| Lectura real del HC-SR04 | Implementada en 1.1.0, amb ecos físics vàlids rebuts |
 
-El programa distribueix una **simulació de 20–200 cm**. Connectar el sensor no activa lectures reals. La integració del sensor serà una versió posterior. Vegeu [VALIDACIO.md](VALIDACIO.md).
+El firmware **1.2.1 arrenca amb el sensor real** (TRIG GPIO4, ECHO GPIO3). A la web pots seleccionar també simulació automàtica o manual. Si no hi ha eco vàlid, envia `/sensor/valid = 0`, distància OSC −1 i distància JSON `null`; no presenta una lectura antiga com a vigent. Vegeu [VALIDACIO.md](VALIDACIO.md).
 
 ## Setup des de zero
 
@@ -42,7 +42,7 @@ El programa distribueix una **simulació de 20–200 cm**. Connectar el sensor n
 12. Instal·la [TouchDesigner](https://derivative.ca/download) i obre [el projecte .toe](touchdesigner/Prova_ESP32_TouchDesigner.toe). La prova es va fer amb **2025.32460**. També hi ha [el component .tox](touchdesigner/Prova_ESP32_TouchDesigner.tox) per importar en un altre projecte.
 13. Consulta la **IP de l’ordinador**. A la web de l’ESP, a **TouchDesigner · OSC**, desa aquesta IP i el port **9000**. El camp està buit inicialment en aquesta edició reutilitzable; no cal editar el codi.
 14. Dins `/project1/esp32_demo`, comprova `osc_in`: **Network Port = 9000**, **Active = On**. Permet TouchDesigner al tallafoc si ho demana.
-15. A la web, selecciona **Manual**, posa **42 cm** i aplica. TouchDesigner ha de mostrar 42 i una proximitat aproximada de 0,878. Amb 155 cm, la proximitat serà 0,25. Torna a Automàtic per veure el moviment.
+15. A la web, selecciona **Simulació manual** a **Font de la distància**, posa **42 cm** i aplica. TouchDesigner ha de mostrar 42 i una proximitat aproximada de 0,878. Amb 155 cm, la proximitat serà 0,25. Tria Simulació automàtica per veure el moviment o Sensor real per llegir el HC-SR04 físic.
 
 La instal·lació oficial del paquet està documentada a [Espressif](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html); el receptor està documentat a [OSC In CHOP](https://docs.derivative.ca/OSC_In_CHOP).
 
@@ -50,11 +50,11 @@ La instal·lació oficial del paquet està documentada a [Espressif](https://doc
 
 - **BOOT durant 5 segons i deixa’l anar:** obre la configuració. El parpelleig molt ràpid indica quan el pots deixar anar.
 - **LED fix:** connectat, portal tancat. Lent: connectant. Regular: configuració oberta.
-- **RESET:** reinicia sense esborrar els ajustos. La simulació torna a Automàtic.
+- **RESET:** reinicia sense esborrar els ajustos. La font torna al sensor real.
 - **IP fixa:** connecta primer amb DHCP i reobre el portal; s’ompliran porta d’enllaç, màscara i DNS amb els valors reals. Tria una IP lliure i reserva-la o exclou-la del rang DHCP del router. També pots mantenir DHCP i fer la reserva només al router.
 - **Diverses plaques:** el nom `ESP-Config-<MAC completa>` és estable i individual. Assigna una IP diferent a cada ESP i ports OSC diferents (9000, 9001, …), cadascun amb el seu OSC In CHOP. Els noms dels missatges `/sensor/…` són compartits.
 
-Missatges aproximadament a 10 Hz: `/sensor/distancia` (float cm), `/sensor/proximitat` (float 0–1), `/sensor/simulat` (int 1) i `/sensor/seq` (int comptador). La web també exposa `/telemetry` en JSON.
+Un enviament per mesura: interval configurable de 70 a 1000 ms (100 ms per defecte; 70 ms dona aproximadament 13–14 Hz). Missatges: `/sensor/distancia` (float cm), `/sensor/proximitat` (float 0–1), `/sensor/simulat` (int: 0 real, 1 simulat), `/sensor/valid` (int: 1 vàlid, 0 sense eco) i `/sensor/seq` (int comptador). La web també exposa `/telemetry` en JSON.
 
 ## Sensor i soldadura
 
@@ -79,7 +79,7 @@ Per eliminar el divisor cal un mòdul amb alimentació i ECHO documentats per a 
 ## Què hi ha al repositori
 
 ```text
-firmware/       Programa complet de la prova (simulat)
+firmware/       Programa complet 1.2.1: sensor real i simulació seleccionable
 touchdesigner/  Projecte .toe i component .tox validats
 hardware/       Esquema funcional i guia de soldadura
 docs/           Web estàtica per a GitHub Pages i descàrregues
@@ -102,3 +102,32 @@ python3 -m http.server 8765 --directory docs
 Obre **http://localhost:8765**. És preferible servir-la així en lloc de fer doble clic a `index.html`, perquè la càrrega del codi complet utilitza `fetch`.
 
 Quan canviïs firmware o fitxers descarregables, torna a executar `prepare_downloads.py`. La publicació de Pages també els regenera automàticament. Consulta [PUBLICACIO.md](PUBLICACIO.md).
+
+## Versió 1.1.0 · sensor connectat
+
+A la web, tria **Sensor real · HC-SR04** i prem **Aplica font de dades**. Comprova la resposta amb un objecte pla a 20–50 cm. El desplegable no modifica la configuració Wi-Fi ni OSC. La simulació continua disponible per comprovar TouchDesigner sense sensor; després d’un reinici sempre s’activa el sensor real.
+
+La proximitat continua normalitzada entre 20 i 200 cm. Una distància real superior a 200 cm és vàlida fins a 400 cm però dona proximitat 0; per sota de 20 cm dona 1.
+
+Alternativa per al divisor quan disposes d’aquest material: **R1 = 2k2** i, d’A a GND, **2k2 + 1k5 en sèrie = 3k7**. Amb ECHO a 5 V, A queda aproximadament a 3,14 V. La il·lustració principal manté l’altra combinació vàlida de 2k2/3k3.
+
+Si ja tens un projecte TouchDesigner antic o una disposició pròpia, el script `touchdesigner/Actualitza_sensor_real.py` actualitza els indicadors de real/simulat i validesa sense reconstruir la xarxa de nodes. El projecte .toe distribuït inclou aquesta actualització.
+
+## Versió 1.2.0 · raw, suavitzat i ritme
+
+A la web de l’ESP obre **Lectura i suavitzat**. Tria interval (70–1000 ms), sortida **Raw** o **EMA**, i alpha (0,01–1). Alpha més petit suavitza més però introdueix retard. Els ajustos es desen a la placa. El HC-SR04 necessita més de 60 ms entre impulsos: no genera 60 mesures noves/s encara que TD treballi a 60 FPS. La web consulta les dades cada 100 ms.
+
+| Canal OSC | Significat |
+| --- | --- |
+| `/sensor/raw` | Distància sense filtre, en cm |
+| `/sensor/filtrada` | EMA en cm; igual a raw si el filtre està desactivat |
+| `/sensor/distancia` | Sortida seleccionada: raw o EMA |
+| `/sensor/echo_us` | Durada física d’ECHO, en µs; 0 sense eco o en simulació |
+| `/sensor/interval_ms` | Interval real entre inicis de mesura |
+| `/sensor/timestamp_ms` | Temps de la mostra des de l’arrencada, en ms |
+
+Les dades de distància invàlides valen −1 per OSC i `null` en JSON: consulta sempre `/sensor/valid`. La dada raw en cm ja es rebia sense filtre a la versió 1.1; els microsegons permeten veure també la mesura anterior a la conversió. Més freqüència no augmenta la precisió física del sensor.
+
+En el projecte TD: **raw_cm** → dada directa, **filtrada_esp_cm** → sortida del filtre a la placa, **suavitzat_td** → Lag CHOP de prova de **0,15 s** sobre raw. Pots variar Lag Up/Down o posar-los a 0. Aquesta branca és per utilitzar en els teus efectes; el panell principal continua mostrant `/sensor/distancia`. **validesa** indica si la dada es pot utilitzar. Evita acumular dos filtres involuntàriament: tria Raw a l’ESP si filtres a TD. [Documentació de Lag CHOP](https://derivative.ca/UserGuide/Lag_CHOP).
+
+La revisió **1.2.1** evita pauses provocades per diagnòstics USB quan el monitor no llegeix i limita la web a una sola consulta en curs. Si la connexió triga, ho indica en lloc de deixar dades aparentment actuals.

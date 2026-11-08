@@ -33,3 +33,16 @@ La lectura del sensor HC-SR04 físic continua pendent, tal com s’explica a [VA
 - Correcció aplicada i desada al projecte Arduino `esp32C3_wifiUltrasonicSensor`; càrrega per Arduino IDE amb verificació correcta i esborrat complet de flash desactivat.
 - Després de carregar, la web de la placa inclou els nous camps `telemetry-mode`, `telemetry-destination` i `telemetry-count`. La IP i la destinació OSC s’han conservat.
 - La lectura continua sent simulada; aquest canvi només afecta la presentació web.
+
+## Firmware 1.1.0 · lectura física del HC-SR04
+
+- Compilació correcta: 1.052.451 bytes (80 %), 38.824 bytes globals (11 %).
+- Càrrega per Arduino IDE al port USB de la Super Mini i reinici correctes.
+- Consulta real de `/telemetry`: versió 1.1.0, `simulated=false`, primera distància vàlida 251,59 cm; també s’han observat absències d’eco comunicades amb `valid=false` i `distance_cm=null`.
+- Prova HTTP del selector: mode manual 42 cm exacte, retorn final a sensor real.
+- IP, identificador individual i destinació OSC conservats.
+- Falta contrastar físicament amb una distància coneguda: la recepció d’ecos no equival a calibratge.
+
+### 1.2.0
+
+Controls d’interval i EMA, canals OSC raw/filtrada/echo_us/interval_ms/timestamp_ms i prova del filtre documentats a VALIDACIO.md.
