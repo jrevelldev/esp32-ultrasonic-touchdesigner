@@ -334,10 +334,20 @@ String oscConfigPanel() {
 
 String simulationPanel() {
   String html = R"HTML(
+<style>
+#reading{font-variant-numeric:tabular-nums;white-space:nowrap}
+#telemetry-state{display:grid;grid-template-rows:repeat(3,1.5em);gap:4px;margin:16px 0;font-size:14px;line-height:1.5;min-width:0;font-variant-numeric:tabular-nums}
+#telemetry-state>div{display:flex;gap:.35em;min-width:0;white-space:nowrap}
+#telemetry-destination{min-width:0;overflow:hidden;text-overflow:ellipsis}
+</style>
 <p><strong>PROVA · SENSOR SIMULAT</strong></p>
 <p id="reading" style="font-size:48px;font-weight:750;margin:12px 0">— cm</p>
 <progress id="proximity" max="1" value="0" style="width:100%;height:22px"></progress>
-<p id="telemetry-state">Esperant la lectura…</p>
+<div id="telemetry-state">
+<div id="telemetry-mode">Esperant la lectura…</div>
+<div>OSC → <span id="telemetry-destination">—</span></div>
+<div>Lectures enviades: <span id="telemetry-count">0</span></div>
+</div>
 <form method="post" action="/simulation">
 <label>Mode de prova<select name="mode">
 )HTML";
@@ -351,9 +361,11 @@ setInterval(async()=>{try{
  const t=await(await fetch('/telemetry',{cache:'no-store'})).json();
  document.getElementById('reading').textContent=t.distance_cm.toFixed(1)+' cm';
  document.getElementById('proximity').value=t.proximity;
- document.getElementById('telemetry-state').textContent=
-   (t.automatic?'Moviment automàtic':'Valor manual')+' · OSC → '+t.osc_host+':'+t.osc_port+
-   ' · '+t.frames_sent+' lectures enviades';
+ document.getElementById('telemetry-mode').textContent=t.automatic?'Moviment automàtic':'Valor manual';
+ const destination=document.getElementById('telemetry-destination');
+ destination.textContent=t.osc_host?t.osc_host+':'+t.osc_port:'Destinació pendent de configurar';
+ destination.title=destination.textContent;
+ document.getElementById('telemetry-count').textContent=t.frames_sent;
 }catch(e){}},300);
 </script>
 )HTML";

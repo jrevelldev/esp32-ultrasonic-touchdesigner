@@ -24,3 +24,12 @@ La lectura del sensor HC-SR04 físic continua pendent, tal com s’explica a [VA
 - Afegida l’explicació de 5 V enfront de 3,3 V amb fonts d’Adafruit i l’alternativa US-100 alimentat a 3,3 V en mode TRIG/ECHO.
 - Comprovada l’ampliació de la nova il·lustració en navegador, les tres referències i l’absència de desbordament de la pàgina a 390 px.
 - Firmware i fitxers TouchDesigner sense canvis en aquesta actualització.
+
+## Correcció del moviment de la web · 8 de novembre de 2026
+
+- El mode, la destinació OSC i el comptador passen a tres files fixes, amb xifres d’amplada constant.
+- Verificat en navegador amb 9, 9.999, 10.000 i 4.294.967.295 lectures, i amb destinació buida. En tots els casos el panell fa 71 px i el formulari conserva la mateixa posició a cada amplada comprovada (1280 i 320 px).
+- Compilació ESP32-C3 amb USB CDC: 1.050.589 bytes de programa, 38.808 bytes de variables globals.
+- Correcció aplicada i desada al projecte Arduino `esp32C3_wifiUltrasonicSensor`; càrrega per Arduino IDE amb verificació correcta i esborrat complet de flash desactivat.
+- Després de carregar, la web de la placa inclou els nous camps `telemetry-mode`, `telemetry-destination` i `telemetry-count`. La IP i la destinació OSC s’han conservat.
+- La lectura continua sent simulada; aquest canvi només afecta la presentació web.
