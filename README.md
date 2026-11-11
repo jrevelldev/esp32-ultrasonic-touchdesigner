@@ -72,6 +72,8 @@ Un enviament per mesura: interval configurable de 70 a 1000 ms (100 ms per defec
 
 El divisor deixa aproximadament **3 V** al GPIO3. **ECHO de 5 V no es connecta directament al GPIO.** Munta i solda sense alimentació, comprova curtcircuits i aïlla les unions. [Guia completa de soldadura](hardware/GUIA_SOLDADURA.md) · [Esquema funcional](hardware/esquema.svg) · [Il·lustració del corrent](docs/assets/corrent-divisor.svg).
 
+Per protegir el muntatge, també hi ha una [caixa imprimible en 3D](hardware/enclosure/README.md) amb els STL del cos i la tapa, fitxers de Blender, el generador paramètric i imatges de referència. [Descarrega el ZIP complet](docs/downloads/sensor-box-3D-files.zip). Comprova les mides del teu conjunt abans d’imprimir-lo.
+
 ### Per què mantenim 5 V i les dues resistències?
 
 La referència mostra un HC-SR04 estàndard, no una variant certificada per funcionar a 3,3 V. El mantenim alimentat a 5 V: TRIG accepta l’impuls de 3,3 V de l’ESP, mentre que ECHO necessita el divisor de 2,2 kΩ / 3,3 kΩ. Alimentar un HC-SR04 estàndard a 3,3 V pot donar resultats poc fiables. [Referència d’Adafruit](https://learn.adafruit.com/distance-measurement-ultrasound-hcsr04/connect-the-sensor).
